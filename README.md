@@ -13,7 +13,7 @@ __mix.exs__
     ]
   end
 
-  {:hydra, path: "./hydra"}
+  {:hydra, git: "https://github.com/laibulle/hydra-ex.git", tag: "master"}
 ```
 
 
