@@ -15,7 +15,15 @@ __mix.exs__
 
   {:hydra, git: "https://github.com/laibulle/hydra-ex.git", tag: "master"}
 ```
+__Config__
 
+```
+config :hydra,
+  admin_url: "${HYDRA_ADMIN_URL}",
+  auth_url: "${ISSUER}",
+  client_id: "${HYDRA_CLIENT_ID}",
+  client_secret: "${HYDRA_CLIENT_SECRET}"
+```
 
 __Plug__
 
@@ -52,5 +60,4 @@ defmodule MyAppWeb.HydraPipeline do
     end
   end
 end
-
 ```
