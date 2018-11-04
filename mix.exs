@@ -6,7 +6,6 @@ defmodule Hydra.MixProject do
   def project do
     [
       app: :hydra,
-      name: "hydra-ex",
       version: @version,
       elixir: "~> 1.6",
       description: "Ory hydra client",
@@ -45,6 +44,7 @@ defmodule Hydra.MixProject do
   defp package do
     # These are the default files included in the package
     [
+      name: :hydra_ex,
       files: ["lib", "mix.exs", "README.md"],
       maintainers: ["Guillaume Bailleul<laibulle@gmail.com>"],
       licenses: ["MIT"],
