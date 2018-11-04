@@ -6,6 +6,7 @@ defmodule Hydra.MixProject do
   def project do
     [
       app: :hydra,
+      name: "hydra-ex",
       version: @version,
       elixir: "~> 1.6",
       description: "Ory hydra client",
