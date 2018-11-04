@@ -8,7 +8,7 @@ defmodule Hydra.Application do
   def start(_type, _args) do
     admin_url = Application.get_env(:admin_url, :address, System.get_env("HYDRA_ADMIN_URL"))
 
-    httpoison_opts = Application.get_env(:hydra, :httpoison_opts, [])
+    # _httpoison_opts = Application.get_env(:hydra, :httpoison_opts, [])
 
     config = %{
       admin_url: admin_url

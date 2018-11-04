@@ -61,3 +61,93 @@ defmodule MyAppWeb.HydraPipeline do
   end
 end
 ```
+
+__Consent controller__
+
+```
+defmodule MyAppWeb.ConsentController do
+  use MyAppWeb, :controller
+  alias Hydra.Admin
+
+  def index(conn, params) do
+    consent_challenge = params["consent_challenge"]
+
+    case Admin.consent(consent_challenge) do
+      %{"skip" => true} ->
+        accept_consent(conn, consent_challenge, %{})
+
+      %{"skip" => false} ->
+        accept_consent(conn, consent_challenge, %{})
+    end
+
+    Admin.consent_accept(consent_challenge, %{})
+    render(conn, "new.html")
+  end
+
+  def accept_consent(conn, challenge, params) do
+    %{"redirect_to" => redirect_to} = Admin.consent_accept(challenge, params)
+    redirect(conn, external: redirect_to)
+  end
+end
+
+```
+
+__Login controller__
+```
+defmodule MyAppWeb.LoginController do
+  use MyAppWeb, :controller
+  alias Hydra.Admin
+  alias MyAppWeb.Repo
+  alias MyAppWeb.Auth.User
+  import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
+
+  def index(conn, params) do
+    login_challenge = params["login_challenge"]
+
+    case Admin.challenge(login_challenge) do
+      %{"skip" => true, "subject" => subject} ->
+        accept_challenge(conn, login_challenge, %{"subject" => subject})
+
+      %{"skip" => false} ->
+        render(conn, "new.html", changeset: %{:login_challenge => login_challenge})
+    end
+  end
+
+  def create(conn, %{"session" => params}) do
+    user = Repo.get_by(User, email: params["email"])
+
+    result =
+      cond do
+        # if user was found and provided password hash equals to stored
+        # hash
+        user && checkpw(params["password"], user.password_hash) ->
+          {:ok, conn}
+
+        # else if we just found the use
+        user ->
+          {:error, :unauthorized, conn}
+
+        # otherwise
+        true ->
+          # simulate check password hash timing
+          dummy_checkpw()
+          {:error, :not_found, conn}
+      end
+
+    case result do
+      {:ok, conn} ->
+        accept_challenge(conn, params["login_challenge"], %{"subject" => "#{user.id}"})
+
+      {:error, _reason, conn} ->
+        conn
+        |> put_flash(:error, "Invalid email/password combination")
+        |> render("new.html", changeset: %{:login_challenge => params["login_challenge"]})
+    end
+  end
+
+  defp accept_challenge(conn, challenge, params) do
+    %{"redirect_to" => redirect_to} = Admin.challenge_accept(challenge, params)
+    redirect(conn, external: redirect_to)
+  end
+end
+```
