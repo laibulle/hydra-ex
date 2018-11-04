@@ -43,16 +43,7 @@ defmodule Hydra.Admin do
     body
   end
 
-  #   {
-  #     "active": true,
-  #     "client_id": "web-client",
-  #     "sub": "1",
-  #     "exp": 1540768377,
-  #     "iat": 1540764777,
-  #     "iss": "http://localhost:4444/",
-  #     "token_type": "access_token"
-  # }
-
+  @spec introspect(String.t(), any()) :: Hydra.IntrospectResponse
   def introspect(token, _scope) do
     {:ok, %HTTPoison.Response{body: body}} =
       Admin.post("/oauth2/introspect", {:form, [token: token]}, [
