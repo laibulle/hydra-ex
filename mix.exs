@@ -48,8 +48,7 @@ defmodule Hydra.MixProject do
       maintainers: ["Guillaume Bailleul<laibulle@gmail.com>"],
       licenses: ["MIT"],
       links: %{
-        "GitHub" => "https://github.com/derniercri/hydra",
-        "DernierCri" => "https://derniercri.io/"
+        "GitHub" => "https://github.com/laibulle/hydra"
       }
     ]
   end
