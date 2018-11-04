@@ -16,6 +16,7 @@ defmodule Hydra.Admin do
 
   def process_request_headers(headers), do: headers
 
+  @spec consent(String.t()) :: any()
   def consent(consent) do
     {:ok, %HTTPoison.Response{body: body}} =
       Admin.get("/oauth2/auth/requests/consent/#{consent}", [])
@@ -23,7 +24,7 @@ defmodule Hydra.Admin do
     body
   end
 
-  @spec consent_accept(any(), any()) :: any()
+  @spec consent_accept(String.t(), any()) :: any()
   def consent_accept(consent, body) do
     {:ok, %HTTPoison.Response{body: body}} =
       Admin.put("/oauth2/auth/requests/consent/#{consent}/accept", body, [])
@@ -31,6 +32,7 @@ defmodule Hydra.Admin do
     body
   end
 
+  @spec challenge_accept(String.t(), any()) :: any()
   def challenge_accept(challenge, body) do
     {:ok, %HTTPoison.Response{body: body}} =
       Admin.put("/oauth2/auth/requests/login/#{challenge}/accept", body, [])
@@ -38,6 +40,7 @@ defmodule Hydra.Admin do
     body
   end
 
+  @spec challenge(String.t()) :: any()
   def challenge(challenge) do
     {:ok, %HTTPoison.Response{body: body}} = Admin.get("/oauth2/auth/requests/login/#{challenge}")
     body
@@ -52,34 +55,4 @@ defmodule Hydra.Admin do
 
     body
   end
-
-  # %{
-  #   "challenge" => "5be3dccf45704e81b81c427a4bc715e7",
-  #   "client" => %{
-  #     "allowed_cors_origins" => [],
-  #     "client_id" => "auth-code-client",
-  #     "client_name" => "",
-  #     "client_secret_expires_at" => 0,
-  #     "client_uri" => "",
-  #     "contacts" => [],
-  #     "grant_types" => ["authorization_code", "refresh_token"],
-  #     "jwks" => %{"keys" => nil},
-  #     "logo_uri" => "",
-  #     "owner" => "",
-  #     "policy_uri" => "",
-  #     "redirect_uris" => ["http://127.0.0.1:4000/callback"],
-  #     "response_types" => ["code", "id_token"],
-  #     "scope" => "openid offline",
-  #     "subject_type" => "public",
-  #     "token_endpoint_auth_method" => "client_secret_basic",
-  #     "tos_uri" => "",
-  #     "userinfo_signed_response_alg" => "none"
-  #   },
-  #   "oidc_context" => %{},
-  #   "request_url" => "http://localhost:4444/oauth2/auth?client_id=auth-code-client&response_type=code&state=12345678",
-  #   "requested_scope" => [],
-  #   "session_id" => "",
-  #   "skip" => false,
-  #   "subject" => ""
-  # }
 end
